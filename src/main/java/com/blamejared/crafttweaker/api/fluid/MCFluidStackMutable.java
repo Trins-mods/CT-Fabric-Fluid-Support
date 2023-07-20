@@ -4,16 +4,15 @@ import com.blamejared.crafttweaker.api.data.MapData;
 import com.blamejared.crafttweaker.api.data.base.converter.tag.TagToDataConverter;
 import net.minecraft.core.Registry;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.fluids.FluidStack;
 import org.openzen.zencode.java.ZenCodeType;
 
 import java.util.Objects;
 
 public class MCFluidStackMutable implements IFluidStack {
 
-    private final FluidStack stack;
+    private final SimpleFluidStack stack;
 
-    public MCFluidStackMutable(FluidStack stack) {
+    public MCFluidStackMutable(SimpleFluidStack stack) {
 
         this.stack = stack;
     }
@@ -28,7 +27,7 @@ public class MCFluidStackMutable implements IFluidStack {
     @Override
     public IFluidStack multiply(long amount) {
 
-        getInternal().setAmount(amount);
+        getInternal().amount(amount);
         return this;
     }
 
@@ -53,7 +52,7 @@ public class MCFluidStackMutable implements IFluidStack {
     @Override
     public Fluid getFluid() {
 
-        return getInternal().getFluid();
+        return getInternal().fluid();
     }
 
     @Override
@@ -61,9 +60,9 @@ public class MCFluidStackMutable implements IFluidStack {
 
         if(tag != null) {
             tag = new MapData(tag.asMap());
-            getInternal().setTag(tag.getInternal());
+            getInternal().tag(tag.getInternal());
         } else {
-            getInternal().setTag(null);
+            getInternal().tag(null);
         }
 
         return this;
@@ -72,7 +71,7 @@ public class MCFluidStackMutable implements IFluidStack {
     @Override
     public MapData getTag() {
 
-        return TagToDataConverter.convertCompound(getInternal().getTag());
+        return TagToDataConverter.convertCompound(getInternal().tag());
     }
 
     @Override
@@ -82,13 +81,13 @@ public class MCFluidStackMutable implements IFluidStack {
     }
 
     @Override
-    public FluidStack getInternal() {
+    public SimpleFluidStack getInternal() {
 
         return stack;
     }
 
     @Override
-    public FluidStack getImmutableInternal() {
+    public SimpleFluidStack getImmutableInternal() {
 
         return stack.copy();
     }
@@ -96,14 +95,14 @@ public class MCFluidStackMutable implements IFluidStack {
     @Override
     public String getCommandString() {
 
-        final Fluid fluid = getInternal().getFluid();
+        final Fluid fluid = getInternal().fluid();
 
         final StringBuilder stringBuilder = new StringBuilder("<fluid:");
         stringBuilder.append(Registry.FLUID.getKey(fluid));
         stringBuilder.append(">");
 
         if(getInternal().hasTag()) {
-            MapData data = TagToDataConverter.convertCompound(getInternal().getTag()).copyInternal();
+            MapData data = TagToDataConverter.convertCompound(getInternal().tag()).copyInternal();
             if(!data.isEmpty()) {
                 stringBuilder.append(".withTag(");
                 stringBuilder.append(data.asString());
@@ -112,8 +111,8 @@ public class MCFluidStackMutable implements IFluidStack {
         }
 
         if(!isEmpty()) {
-            if(getInternal().getRealAmount() != 1) {
-                stringBuilder.append(" * ").append(getInternal().getRealAmount());
+            if(getInternal().amount() != 1) {
+                stringBuilder.append(" * ").append(getInternal().amount());
             }
         }
 
@@ -131,28 +130,28 @@ public class MCFluidStackMutable implements IFluidStack {
             return false;
         }
 
-        final FluidStack thatStack = ((MCFluidStackMutable) o).getInternal();
-        final FluidStack thisStack = getInternal();
+        final SimpleFluidStack thatStack = ((MCFluidStackMutable) o).getInternal();
+        final SimpleFluidStack thisStack = getInternal();
 
         if(thisStack.isEmpty()) {
             return thatStack.isEmpty();
         }
 
-        if(thisStack.getRealAmount() != thatStack.getRealAmount()) {
+        if(thisStack.amount() != thatStack.amount()) {
             return false;
         }
 
-        if(!Objects.equals(thisStack.getFluid(), thatStack.getFluid())) {
+        if(!Objects.equals(thisStack.fluid(), thatStack.fluid())) {
             return false;
         }
 
-        return Objects.equals(thisStack.getTag(), thatStack.getTag());
+        return Objects.equals(thisStack.tag(), thatStack.tag());
     }
 
     @Override
     public int hashCode() {
 
-        return Objects.hash(getInternal().getRealAmount(), getInternal().getFluid(), getInternal().getTag());
+        return Objects.hash(getInternal().amount(), getInternal().fluid(), getInternal().tag());
     }
 
 }

@@ -28,10 +28,6 @@ dependencies {
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
 	modImplementation("com.blamejared.crafttweaker:CraftTweaker-common-1.18.2:${project.crafttweaker_version}")
-	modImplementation("io.github.fabricators_of_create:Porting-Lib:1.1.310-beta+1.18.2-dev.${project.port_lib_hash}"){ transitive(false) }
-	modImplementation(include("com.github.FeltMC.Fabricated-Forge-API:fabricated-forge-caps:${project.fabricated_forge_hash}")){
-		transitive = false
-	}
 }
 
 processResources {

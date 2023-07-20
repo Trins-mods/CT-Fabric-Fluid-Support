@@ -7,7 +7,6 @@ import com.blamejared.crafttweaker.platform.Services;
 import com.blamejared.crafttweaker_annotations.annotations.Document;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.material.Fluid;
-import net.minecraftforge.fluids.FluidStack;
 import org.openzen.zencode.java.ZenCodeType;
 
 import java.util.ArrayList;
@@ -40,7 +39,7 @@ public interface IFluidStack extends CommandStringDisplayable {
     @ZenCodeType.Operator(ZenCodeType.OperatorType.CONTAINS)
     default boolean containsOther(IFluidStack other) {
 
-        return this.getInternal().containsFluid(other.getInternal());
+        return this.getInternal().containsOther(other.getInternal());
     }
 
     /**
@@ -62,7 +61,7 @@ public interface IFluidStack extends CommandStringDisplayable {
     @ZenCodeType.Getter("amount")
     default long getAmount() {
 
-        return getInternal().getRealAmount();
+        return getInternal().amount();
     }
 
     /**
@@ -157,17 +156,10 @@ public interface IFluidStack extends CommandStringDisplayable {
     /**
      * Moddevs, use this to get the Vanilla version.
      */
-    FluidStack getInternal();
+    SimpleFluidStack getInternal();
 
-    FluidStack getImmutableInternal();
+    SimpleFluidStack getImmutableInternal();
 
-    default io.github.fabricators_of_create.porting_lib.util.FluidStack getPortingLibInternal(){
-        return getInternal().toPortingLibStack();
-    }
-
-    default io.github.fabricators_of_create.porting_lib.util.FluidStack getImmutablePortingLibInternal(){
-        return getImmutableInternal().toPortingLibStack();
-    }
 
     @ZenCodeType.Caster(implicit = true)
     default CTFluidIngredient asFluidIngredient() {
