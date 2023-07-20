@@ -6,7 +6,7 @@ import net.minecraft.world.level.material.Fluids;
 
 import javax.annotation.Nullable;
 
-class SimpleFluidStack {
+public class SimpleFluidStack {
     static SimpleFluidStack EMPTY = new SimpleFluidStack(Fluids.EMPTY, 0);
     private final Fluid fluid;
     private long amount;
