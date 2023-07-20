@@ -1,0 +1,42 @@
+package com.blamejared.crafttweaker.api.bracket;
+
+import com.blamejared.crafttweaker.api.annotation.BracketResolver;
+import com.blamejared.crafttweaker.api.annotation.ZenRegister;
+import com.blamejared.crafttweaker.api.fluid.IFluidStack;
+import com.blamejared.crafttweaker.api.fluid.MCFluidStack;
+import com.blamejared.crafttweaker.api.fluid.SimpleFluidStack;
+import com.blamejared.crafttweaker_annotations.annotations.Document;
+import net.minecraft.core.Registry;
+import net.minecraft.resources.ResourceLocation;
+import org.openzen.zencode.java.ZenCodeType;
+
+@ZenRegister
+@ZenCodeType.Name("crafttweaker.api.bracket.FabricBracketHandlers")
+@Document("forge/api/BracketHandlers")
+public class FabricBracketHandlers {
+
+    /**
+     * Gets the fluid Stack based on registry name. Throws an error if it can't find the fluid.
+     *
+     * @param tokens The Fluid's resource location
+     *
+     * @return A stack of the liquid with amount == 1mb
+     *
+     * @docParam tokens "minecraft:water"
+     */
+    @ZenCodeType.Method
+    @BracketResolver("fluid")
+    public static IFluidStack getFluidStack(String tokens) {
+
+        final ResourceLocation resourceLocation = ResourceLocation.tryParse(tokens);
+        if(resourceLocation == null) {
+            throw new IllegalArgumentException("Could not get fluid for <fluid:" + tokens + ">. Syntax is <fluid:modid:fluidname>");
+        }
+
+        if(!Registry.FLUID.containsKey(resourceLocation)) {
+            throw new IllegalArgumentException("Could not get fluid for <fluid:" + tokens + ">. Fluid does not appear to exist!");
+        }
+
+        return new MCFluidStack(new SimpleFluidStack(Registry.FLUID.get(resourceLocation), 1));
+    }
+}

@@ -1,0 +1,33 @@
+package com.blamejared.crafttweaker.api.bracket;
+
+import com.blamejared.crafttweaker.api.CraftTweakerAPI;
+import com.blamejared.crafttweaker.api.annotation.BracketValidator;
+import com.blamejared.crafttweaker.api.annotation.ZenRegister;
+import com.blamejared.crafttweaker.platform.Services;
+import com.blamejared.crafttweaker_annotations.annotations.Document;
+import net.minecraft.resources.ResourceLocation;
+import org.openzen.zencode.java.ZenCodeType;
+
+@ZenRegister
+@ZenCodeType.Name("crafttweaker.api.bracket.FabricBracketValidators")
+@Document("forge/api/ForgeBracketValidators")
+public class FabricBracketValidators {
+    @ZenCodeType.StaticExpansionMethod
+    @BracketValidator("fluid")
+    public static boolean validateFluidStack(String tokens) {
+
+        final ResourceLocation resourceLocation = ResourceLocation.tryParse(tokens);
+        if(resourceLocation == null) {
+            CraftTweakerAPI.LOGGER.error("Could not get BEP <fluid:{}>. Syntax is <fluid:modid:fluidname>", tokens);
+            return false;
+        }
+
+        if(Services.REGISTRY.fluids().containsKey(resourceLocation)) {
+            return true;
+        }
+
+        CraftTweakerAPI.LOGGER.error("Could not get fluid for <fluid:{}>. Fluid does not appear to exist!", tokens);
+        return false;
+
+    }
+}
