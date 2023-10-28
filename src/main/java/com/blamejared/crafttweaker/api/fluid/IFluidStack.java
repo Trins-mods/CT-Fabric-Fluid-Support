@@ -2,9 +2,11 @@ package com.blamejared.crafttweaker.api.fluid;
 
 import com.blamejared.crafttweaker.api.annotation.ZenRegister;
 import com.blamejared.crafttweaker.api.bracket.CommandStringDisplayable;
+import com.blamejared.crafttweaker.api.data.IData;
 import com.blamejared.crafttweaker.api.data.MapData;
 import com.blamejared.crafttweaker.platform.Services;
 import com.blamejared.crafttweaker_annotations.annotations.Document;
+import net.minecraft.core.Registry;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.level.material.Fluid;
 import org.openzen.zencode.java.ZenCodeType;
@@ -25,7 +27,7 @@ public interface IFluidStack extends CommandStringDisplayable {
     @ZenCodeType.Getter("registryName")
     default ResourceLocation getRegistryName() {
 
-        return Services.REGISTRY.getRegistryKey(getFluid());
+        return Registry.FLUID.getKey(getFluid());
     }
 
     /**
@@ -128,7 +130,7 @@ public interface IFluidStack extends CommandStringDisplayable {
      */
     @ZenCodeType.Getter("tag")
     @ZenCodeType.Method
-    MapData getTag();
+    IData getTag();
 
     /**
      * Sets the tag for the FluidStack.

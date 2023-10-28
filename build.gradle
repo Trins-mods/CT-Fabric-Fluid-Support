@@ -27,7 +27,7 @@ dependencies {
 
 	// Fabric API. This is technically optional, but you probably want it anyway.
 	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-	modImplementation("com.blamejared.crafttweaker:CraftTweaker-fabric-1.18.2:${project.crafttweaker_version}")
+	modImplementation("com.blamejared.crafttweaker:CraftTweaker-fabric-1.19.2:${project.crafttweaker_version}")
 }
 
 processResources {

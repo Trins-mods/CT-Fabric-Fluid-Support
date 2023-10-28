@@ -1,7 +1,8 @@
 package com.blamejared.crafttweaker.api.fluid;
 
+import com.blamejared.crafttweaker.api.data.IData;
 import com.blamejared.crafttweaker.api.data.MapData;
-import com.blamejared.crafttweaker.api.data.base.converter.tag.TagToDataConverter;
+import com.blamejared.crafttweaker.api.data.converter.tag.TagToDataConverter;
 import net.minecraft.core.Registry;
 import net.minecraft.world.level.material.Fluid;
 import org.openzen.zencode.java.ZenCodeType;
@@ -69,9 +70,8 @@ public class MCFluidStackMutable implements IFluidStack {
     }
 
     @Override
-    public MapData getTag() {
-
-        return TagToDataConverter.convertCompound(getInternal().tag());
+    public IData getTag() {
+        return TagToDataConverter.convert(getInternal().tag());
     }
 
     @Override
@@ -102,7 +102,7 @@ public class MCFluidStackMutable implements IFluidStack {
         stringBuilder.append(">");
 
         if(getInternal().hasTag()) {
-            MapData data = TagToDataConverter.convertCompound(getInternal().tag()).copyInternal();
+            IData data = TagToDataConverter.convert(getInternal().tag()).copyInternal();
             if(!data.isEmpty()) {
                 stringBuilder.append(".withTag(");
                 stringBuilder.append(data.asString());
