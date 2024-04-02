@@ -10,6 +10,9 @@ archivesBaseName = project.archives_base_name
 version = project.mod_version
 group = project.maven_group
 
+def isCI = System.getenv("GITHUB_ACTION")
+def isRELEASE = System.getenv("GITHUB_RELEASE")
+
 repositories {
 	maven { url = "https://mvn.devos.one/snapshots/" }
 	maven {
@@ -64,11 +67,17 @@ publishing {
 		}
 	}
 
-	// See https://docs.gradle.org/current/userguide/publishing_maven.html for information on how to set up publishing.
 	repositories {
-		// Add repositories to publish to here.
-		// Notice: This block does NOT have the same function as the block in the top level.
-		// The repositories here will be used for publishing your artifact, not for
-		// retrieving dependencies.
+		if (isCI && isRELEASE) {
+			maven {
+				url = "https://repo.repsy.io/mvn/trinsdar/trins-mods/"
+				credentials {
+					username = System.getenv("MAVEN_USERNAME")
+					password = System.getenv("MAVEN_PASSWORD")
+				}
+			}
+		} else {
+			mavenLocal()
+		}
 	}
 }
