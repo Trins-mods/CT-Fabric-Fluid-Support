@@ -3,8 +3,8 @@ package com.blamejared.crafttweaker.api.fluid;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.level.material.Fluid;
 import net.minecraft.world.level.material.Fluids;
+import org.jetbrains.annotations.Nullable;
 
-import javax.annotation.Nullable;
 
 public class SimpleFluidStack {
     static SimpleFluidStack EMPTY = new SimpleFluidStack(Fluids.EMPTY, 0);
