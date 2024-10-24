@@ -63,6 +63,7 @@ jar {
 publishing {
 	publications {
 		mavenJava(MavenPublication) {
+			artifactId = "ct-fabric-fluid-support"
 			from components.java
 		}
 	}
