@@ -1,17 +1,17 @@
+import org.gradle.jvm.toolchain.JavaLanguageVersion
+
 plugins {
-	id 'fabric-loom' version '0.12-SNAPSHOT'
+	id 'fabric-loom' version '1.6-SNAPSHOT'
 	id 'maven-publish'
 }
 
-sourceCompatibility = JavaVersion.VERSION_17
-targetCompatibility = JavaVersion.VERSION_17
+java.toolchain.languageVersion = JavaLanguageVersion.of(17)
 
 archivesBaseName = project.archives_base_name
 version = project.mod_version
 group = project.maven_group
 
-def isCI = System.getenv("GITHUB_ACTION")
-def isRELEASE = System.getenv("GITHUB_RELEASE")
+def isCI = System.getenv("CI")
 
 repositories {
 	maven { url = "https://mvn.devos.one/snapshots/" }
@@ -68,13 +68,9 @@ publishing {
 	}
 
 	repositories {
-		if (isCI && isRELEASE) {
+		if (isCI) {
 			maven {
-				url = "https://repo.repsy.io/mvn/trinsdar/trins-mods/"
-				credentials {
-					username = System.getenv("MAVEN_USERNAME")
-					password = System.getenv("MAVEN_PASSWORD")
-				}
+				url System.getenv("local_maven_url")
 			}
 		} else {
 			mavenLocal()
